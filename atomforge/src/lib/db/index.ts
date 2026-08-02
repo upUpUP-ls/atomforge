@@ -1,11 +1,25 @@
 import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { PrismaLibSql } from '@prisma/adapter-libsql';
 import { PrismaClient } from '@/generated/prisma/client';
 
 /**
- * 创建带 SQLite 适配器的 Prisma Client（Prisma 7 必需）。
+ * 判断是否为 Turso / libSQL 连接串。
+ */
+function isLibsqlUrl(url: string): boolean {
+  return url.startsWith('libsql:');
+}
+
+/**
+ * 创建 Prisma Client：本地 file: 用 better-sqlite3，生产 libsql: 用 Turso 适配器。
  */
 function createPrismaClient(): PrismaClient {
   const url = process.env.DATABASE_URL ?? 'file:./dev.db';
+
+  if (isLibsqlUrl(url)) {
+    const adapter = new PrismaLibSql({ url });
+    return new PrismaClient({ adapter });
+  }
+
   const adapter = new PrismaBetterSqlite3({ url });
   return new PrismaClient({ adapter });
 }
