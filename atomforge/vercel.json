@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "src/app/api/projects/[id]/pipeline-runs/[runId]/events/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/projects/[id]/pipeline-runs/route.ts": {
+      "maxDuration": 60
+    }
+  }
+}

@@ -1,0 +1,66 @@
+// AtomForge 数据模型
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  name      String?
+  projects  Project[]
+  createdAt DateTime  @default(now())
+}
+
+model Project {
+  id           String        @id @default(cuid())
+  title        String
+  prompt       String
+  status       String        @default("draft")
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  agentRuns    AgentRun[]
+  pipelineRuns PipelineRun[]
+  artifacts    Artifact[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model PipelineRun {
+  id           String   @id @default(cuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  mode         String   @default("full")
+  feedback     String?
+  planOverride String?
+  status       String   @default("pending")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model AgentRun {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  agentName String
+  input     String
+  output    String   @default("")
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+}
+
+model Artifact {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type      String
+  content   String
+  version   Int      @default(1)
+  createdAt DateTime @default(now())
+}
