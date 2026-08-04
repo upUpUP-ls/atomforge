@@ -10,6 +10,7 @@ import {
   Bell,
 } from 'lucide-react';
 import { LogoutButton } from '@/features/auth/components/logout-button';
+import { AiModeBadge } from '@/components/ai-mode-badge';
 import type { ProjectSummary } from '@/features/projects/templates';
 import { cn } from '@/lib/utils';
 
@@ -131,6 +132,9 @@ export function AppSidebar({ email, name, recentProjects }: AppSidebarProps) {
       )}
 
       <div className="mt-auto border-t p-3">
+        <div className="mb-3 px-1">
+          <AiModeBadge compact className="w-full justify-center" />
+        </div>
         <div className="mb-2 flex items-center justify-between px-1">
           <div className="flex items-center gap-2 overflow-hidden">
             <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-xs font-bold text-white">

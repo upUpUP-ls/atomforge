@@ -18,6 +18,56 @@
 
 ---
 
+## 健康检查（公开，无需登录）
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| `GET` | `/api/health/ai` | 查询当前 AI 运行模式（OpenAI 或 Fallback） |
+
+用于评审或运维 **自证线上是否配置了真实 OpenAI 模型**，不暴露 `OPENAI_API_KEY`。
+
+### GET /api/health/ai
+
+**响应** `200`（已配置 Key，使用真实模型）
+
+```json
+{
+  "data": {
+    "configured": true,
+    "mode": "openai",
+    "model": "gpt-4o-mini"
+  }
+}
+```
+
+**响应** `200`（未配置 Key，走 Fallback 模板）
+
+```json
+{
+  "data": {
+    "configured": false,
+    "mode": "fallback",
+    "model": null
+  }
+}
+```
+
+| 字段 | 说明 |
+|------|------|
+| `configured` | 服务端是否检测到 `OPENAI_API_KEY` |
+| `mode` | `openai` = 调用 OpenAI API；`fallback` = 预置模板 |
+| `model` | 真实模型 ID；Fallback 时为 `null` |
+
+**UI 对应：** 登录后工作台侧栏底部、项目编辑器顶栏会显示 `AI: OpenAI · gpt-4o-mini`（绿色）或 `AI: Fallback 模板`（琥珀色），与接口结果一致。
+
+**线上验收示例：**
+
+```bash
+curl https://atomforge-m8bt.vercel.app/api/health/ai
+```
+
+---
+
 ## 用户
 
 | 方法 | 路径 | 说明 |

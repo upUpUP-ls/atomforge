@@ -1,6 +1,7 @@
 # AtomForge 部署指南（Vercel + Turso）
 
-> **重要**：仅把代码推到 GitHub **不会**自动生成可访问链接。必须完成本指南，才会得到形如 `https://atomforge-xxx.vercel.app` 的公网 URL。
+> **当前在线 Demo：** [https://atomforge-m8bt.vercel.app](https://atomforge-m8bt.vercel.app)  
+> **重要**：仅把代码推到 GitHub **不会**自动生成可访问链接。必须完成本指南，才会得到公网 URL。
 
 ## 部署架构
 
@@ -18,7 +19,7 @@
                          ↓
             Turso 云数据库存用户/项目
                          ↓
-         https://你的项目名.vercel.app
+         https://atomforge-m8bt.vercel.app
 ```
 
 ---
@@ -93,7 +94,7 @@ openssl rand -base64 32
 **关于 `NEXTAUTH_URL`：**
 
 - 首次 Deploy 前可填 `http://localhost:3000`
-- 部署成功后改为真实地址，如 `https://atomforge-abc123.vercel.app`
+- 部署成功后改为真实地址：`https://atomforge-m8bt.vercel.app`
 - 回到 **Settings → Environment Variables** 修改后 **Redeploy**
 
 ---
@@ -102,14 +103,13 @@ openssl rand -base64 32
 
 1. 点击 **Deploy**
 2. 等待构建完成，确认日志中有 `prisma generate`、`prisma migrate deploy`、`next build`
-3. 复制 **Domains** 下的地址：`https://atomforge-xxx.vercel.app`
-4. 将链接写入 `README.md` 的「在线 Demo」章节
+3. 确认 **Domains** 下的地址为：`https://atomforge-m8bt.vercel.app`（已写入 [README.md](./README.md)「在线 Demo」章节）
 
 ---
 
 ## 第六步：部署后验证
 
-在**在线链接**上（不是 localhost）逐项测试：
+在 **[https://atomforge-m8bt.vercel.app](https://atomforge-m8bt.vercel.app)** 上（不是 localhost）逐项测试：
 
 | # | 操作 | 预期 |
 |---|------|------|
@@ -142,7 +142,7 @@ Vercel 默认 **push 即自动重新部署**，链接不变。
 |------|----------|------|
 | Build 失败 `prisma migrate` | `DATABASE_URL` 错误或 token 过期 | 检查 Turso 连接串 |
 | 打开链接 500 | 环境变量未配全 | 核对第四节三张表 |
-| 能打开但登录报错 | `NEXTAUTH_URL` 不对 | 改成真实 `https://xxx.vercel.app` 并 Redeploy |
+| 能打开但登录报错 | `NEXTAUTH_URL` 不对 | 改成 `https://atomforge-m8bt.vercel.app` 并 Redeploy |
 | 注册成功但数据丢失 | 仍在用 `file:./dev.db` | 生产必须 Turso URL |
 | Agent 无输出 | 无 API Key | 正常，应走 Fallback |
 | SSE 中途断开 | Serverless 超时 | 项目已配置 `vercel.json` 的 `maxDuration: 60` |
@@ -154,7 +154,7 @@ Vercel 默认 **push 即自动重新部署**，链接不变。
 | 变量 | 本地开发 | Vercel 生产 |
 |------|----------|-------------|
 | `DATABASE_URL` | `file:./dev.db` | `libsql://...?authToken=...` |
-| `NEXTAUTH_URL` | `http://localhost:3000` | `https://你的项目.vercel.app` |
+| `NEXTAUTH_URL` | `http://localhost:3000` | `https://atomforge-m8bt.vercel.app` |
 | `NEXTAUTH_SECRET` | 任意 dev 字符串 | 生产用随机强密钥 |
 | `OPENAI_API_KEY` | 可选 | 可选 |
 
@@ -167,9 +167,15 @@ Vercel 默认 **push 即自动重新部署**，链接不变。
 □ 2. vercel.com → Import GitHub 仓库
 □ 3. 填环境变量：DATABASE_URL、NEXTAUTH_SECRET、NEXTAUTH_URL
 □ 4. Deploy
-□ 5. 把 NEXTAUTH_URL 改成真实 vercel.app 域名 → Redeploy
-□ 6. 在线全流程测一遍
-□ 7. 复制链接写进 README
+□ 5. 把 NEXTAUTH_URL 改成 https://atomforge-m8bt.vercel.app → Redeploy
+□ 6. 在 https://atomforge-m8bt.vercel.app 在线全流程测一遍
+□ 7. README 在线 Demo 链接已填写：https://atomforge-m8bt.vercel.app
 ```
 
 **仅完成 git push 不够；必须完成 □2–□5 才有公网链接。**
+
+---
+
+## 下架与清理
+
+Demo 结束、不再对外展示时，可按 [docs/下架指南.md](./docs/下架指南.md) 删除 Vercel 项目、Turso 数据库等。**免费档不删也不会自动扣费**，下架纯属可选。

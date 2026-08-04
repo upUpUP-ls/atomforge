@@ -9,6 +9,7 @@ import { AgentChat } from './agent-chat';
 import { PreviewPanel } from './preview-panel';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { AiModeBadge } from '@/components/ai-mode-badge';
 import { PROJECT_STATUS_LABELS } from '@/features/projects/templates';
 
 interface ProjectEditorProps {
@@ -82,6 +83,7 @@ export function ProjectEditor({
           <Badge variant="secondary" className="shrink-0 text-xs">
             {PROJECT_STATUS_LABELS[status] ?? status}
           </Badge>
+          <AiModeBadge />
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {!running && !awaitingApproval && (
